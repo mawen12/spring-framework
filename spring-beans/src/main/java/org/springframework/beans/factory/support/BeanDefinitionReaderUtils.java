@@ -81,8 +81,7 @@ public abstract class BeanDefinitionReaderUtils {
 	 * for the given bean definition
 	 * @see #generateBeanName(BeanDefinition, BeanDefinitionRegistry, boolean)
 	 */
-	public static String generateBeanName(BeanDefinition beanDefinition, BeanDefinitionRegistry registry)
-			throws BeanDefinitionStoreException {
+	public static String generateBeanName(BeanDefinition beanDefinition, BeanDefinitionRegistry registry) throws BeanDefinitionStoreException {
 
 		return generateBeanName(beanDefinition, registry, false);
 	}

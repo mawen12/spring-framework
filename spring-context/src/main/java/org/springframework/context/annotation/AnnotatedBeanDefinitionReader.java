@@ -34,10 +34,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Convenient adapter for programmatic registration of bean classes.
+ * 提供编程式注册Bean的便利适配
  *
- * <p>This is an alternative to {@link ClassPathBeanDefinitionScanner}, applying
- * the same resolution of annotations but for explicitly registered classes only.
+ * <p>这是{@link ClassPathBeanDefinitionScanner}的替代方案，应用相同的注解解析，但仅适用于明确注册的类
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -45,11 +44,17 @@ import org.springframework.util.Assert;
  * @author Phillip Webb
  * @since 3.0
  * @see AnnotationConfigApplicationContext#register
+ * @see ClassPathBeanDefinitionScanner
  */
 public class AnnotatedBeanDefinitionReader {
-
+	/**
+	 * Bean定义注册器
+	 */
 	private final BeanDefinitionRegistry registry;
 
+	/**
+	 * Bean名称生成器
+	 */
 	private BeanNameGenerator beanNameGenerator = AnnotationBeanNameGenerator.INSTANCE;
 
 	private ScopeMetadataResolver scopeMetadataResolver = new AnnotationScopeMetadataResolver();

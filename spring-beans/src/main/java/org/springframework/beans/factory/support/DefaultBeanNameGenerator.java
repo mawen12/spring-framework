@@ -19,8 +19,7 @@ package org.springframework.beans.factory.support;
 import org.springframework.beans.factory.config.BeanDefinition;
 
 /**
- * Default implementation of the {@link BeanNameGenerator} interface, delegating to
- * {@link BeanDefinitionReaderUtils#generateBeanName(BeanDefinition, BeanDefinitionRegistry)}.
+ * {@link BeanNameGenerator}的默认实现，生成方法将被代理到{@link BeanDefinitionReaderUtils#generateBeanName(BeanDefinition, BeanDefinitionRegistry)}
  *
  * @author Juergen Hoeller
  * @since 2.0.3
@@ -28,8 +27,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 public class DefaultBeanNameGenerator implements BeanNameGenerator {
 
 	/**
-	 * A convenient constant for a default {@code DefaultBeanNameGenerator} instance,
-	 * as used for {@link AbstractBeanDefinitionReader} setup.
+	 * 用于{@link AbstractBeanDefinitionReader}启动所提供的便利常量
+	 *
 	 * @since 5.2
 	 */
 	public static final DefaultBeanNameGenerator INSTANCE = new DefaultBeanNameGenerator();

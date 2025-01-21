@@ -28,28 +28,31 @@ import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link BeanNameGenerator} implementation for bean classes annotated with the
- * {@link org.springframework.stereotype.Component @Component} annotation or
- * with another annotation that is itself annotated with {@code @Component} as a
- * meta-annotation. For example, Spring's stereotype annotations (such as
- * {@link org.springframework.stereotype.Repository @Repository}) are
- * themselves annotated with {@code @Component}.
+ * 提供给使用{@link Component}注解的类，
+ * 或者是使用以{@link Component}作为元注解的类，所生成Bean名称的实现。
  *
- * <p>Also supports Jakarta EE's {@link jakarta.annotation.ManagedBean} and
- * JSR-330's {@link jakarta.inject.Named} annotations, if available. Note that
- * Spring component annotations always override such standard annotations.
+ * <p>同时支持Jakarta EE的{@link jakarta.annotation.ManagedBean}和 JSR-330的{@link jakarta.inject.Named}注解。
+ * 如果可用，请注意Spring的{@link Component}注解始终会覆盖此类标准注释。
  *
- * <p>If the annotation's value doesn't indicate a bean name, an appropriate
- * name will be built based on the short name of the class (with the first
- * letter lower-cased), unless the first two letters are uppercase. For example:
+ * <p>如果没有设置{@link Component#value()}，则会根据类的短名称构建适当的名称（首字母小写），除非前两个字母都是大写。例如：
+ * <ul>
+ *     <li>com.mawen.FooServiceImpl -> fooServiceImpl</li>
+ *     <li>com.mawen.URLServiceImpl -> URLServiceImpl</li>
+ * </ul>
  *
- * <pre class="code">com.xyz.FooServiceImpl -&gt; fooServiceImpl</pre>
- * <pre class="code">com.xyz.URLFooServiceImpl -&gt; URLFooServiceImpl</pre>
+ * <p>以{@link Component}作为元注解的类有：
+ * <ul>
+ *     <li>{@link org.springframework.stereotype.Repository}</li>
+ *     <li>{@link org.springframework.stereotype.Service}</li>
+ *     <li>{@link org.springframework.stereotype.Controller}</li>
+ * </ul>
+ *
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -70,6 +73,9 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 */
 	public static final AnnotationBeanNameGenerator INSTANCE = new AnnotationBeanNameGenerator();
 
+	/**
+	 * 组件注解类名
+	 */
 	private static final String COMPONENT_ANNOTATION_CLASSNAME = "org.springframework.stereotype.Component";
 
 	private final Map<String, Set<String>> metaAnnotationTypesCache = new ConcurrentHashMap<>();

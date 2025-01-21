@@ -29,20 +29,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Standalone application context, accepting <em>component classes</em> as input &mdash;
- * in particular {@link Configuration @Configuration}-annotated classes, but also plain
- * {@link org.springframework.stereotype.Component @Component} types and JSR-330 compliant
- * classes using {@code jakarta.inject} annotations.
+ * 独立的应用上下文，接受{@code component}作为输入，特别是{@link Configuration}注解的类，
+ * 但也接受普通的{@link org.springframework.stereotype.Component}类型，复合JSR330，以及{@code jakarta.inject}相关注解
  *
- * <p>Allows for registering classes one by one using {@link #register(Class...)}
- * as well as for classpath scanning using {@link #scan(String...)}.
+ * <p>允许依次使用{@link #register(Class[])}和{@link #scan(String...)}来注册类
  *
- * <p>In case of multiple {@code @Configuration} classes, {@link Bean @Bean} methods
- * defined in later classes will override those defined in earlier classes. This can
- * be leveraged to deliberately override certain bean definitions via an extra
- * {@code @Configuration} class.
+ * <p>如果有多个{@link Configuration}类，则在后面的类中定义的{@link Bean}方法将覆盖在前面的类中定义的方法。这可以通过额外的
+ * {@link Configuration}来故意覆盖某些bean定义。
  *
- * <p>See {@link Configuration @Configuration}'s javadoc for usage examples.
+ * <p>出现覆盖的情况，是由于每个Bean都会先生成{@link org.springframework.beans.factory.support.RootBeanDefinition}，在调用{@link #refresh()}之前，
+ * 可以被后续的进行覆盖。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -55,6 +51,9 @@ import org.springframework.util.Assert;
  */
 public class AnnotationConfigApplicationContext extends GenericApplicationContext implements AnnotationConfigRegistry {
 
+	/**
+	 *
+	 */
 	private final AnnotatedBeanDefinitionReader reader;
 
 	private final ClassPathBeanDefinitionScanner scanner;
@@ -152,9 +151,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	//---------------------------------------------------------------------
 
 	/**
-	 * Register one or more component classes to be processed.
-	 * <p>Note that {@link #refresh()} must be called in order for the context
-	 * to fully process the new classes.
+	 * 注册一个或多个组件类
+	 *
+	 * <p>需要注意，必须调用{@link #refresh()}才能让上下文完全处理新类
+	 *
 	 * @param componentClasses one or more component classes &mdash; for example,
 	 * {@link Configuration @Configuration} classes
 	 * @see #scan(String...)
@@ -162,9 +162,11 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 */
 	@Override
 	public void register(Class<?>... componentClasses) {
+		// 类非空
 		Assert.notEmpty(componentClasses, "At least one component class must be specified");
-		StartupStep registerComponentClass = this.getApplicationStartup().start("spring.context.component-classes.register")
-				.tag("classes", () -> Arrays.toString(componentClasses));
+		// 开启执行步骤
+		StartupStep registerComponentClass = this.getApplicationStartup().start("spring.context.component-classes.register").tag("classes", () -> Arrays.toString(componentClasses));
+		// 使用
 		this.reader.register(componentClasses);
 		registerComponentClass.end();
 	}
